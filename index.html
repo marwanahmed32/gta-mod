@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GTA V PS4 Web Trainer - Super Cars</title>
+    <style>
+        body {
+            background-color: #0d0d0d;
+            color: #ffffff;
+            font-family: 'Tahoma', sans-serif;
+            text-align: center;
+            margin: 0;
+            padding: 20px;
+        }
+        h1 {
+            color: #ffb700;
+            text-shadow: 0px 0px 10px rgba(255, 183, 0, 0.5);
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: #1a1a1a;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(255, 183, 0, 0.2);
+        }
+        .input-group {
+            margin-bottom: 20px;
+        }
+        input[type="text"] {
+            padding: 10px;
+            width: 70%;
+            border-radius: 5px;
+            border: 1px solid #444;
+            background: #222;
+            color: #fff;
+            font-size: 16px;
+        }
+        button {
+            background: #ffb700;
+            color: #000;
+            border: none;
+            padding: 12px 20px;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+            transition: 0.3s;
+        }
+        button:hover {
+            background: #ff8800;
+        }
+        .car-btn {
+            background: #2196F3;
+            color: white;
+            width: 45%;
+            margin: 8px;
+        }
+        .car-btn:hover {
+            background: #0b7dda;
+        }
+        .status {
+            margin-top: 15px;
+            font-weight: bold;
+            color: #00ff66;
+        }
+        .section-title {
+            color: #ffb700;
+            border-bottom: 2px solid #ffb700;
+            padding-bottom: 5px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>GTA V PS4 Mod Menu</h1>
+        <p>إصدار اللعبة: 1.27 | الإصدار المدعوم: WebRTE</p>
+
+        <!-- إعدادات الاتصال بالبلايستيشن -->
+        <div class="input-group">
+            <label for="ps4-ip">آي بي البلايستيشن (IP):</label><br><br>
+            <input type="text" id="ps4-ip" placeholder="مثال: 192.168.1.50">
+            <br>
+            <button onclick="connectPS4()">اتصال</button>
+            <div id="connection-status" class="status">الحالة: غير متصل</div>
+        </div>
+
+        <hr style="border-color: #333;">
+
+        <!-- قائمة العربيات وسرعتها -->
+        <h3 class="section-title">قائمة السيارات فائقة السرعة</h3>
+        <div>
+            <button class="car-btn" onclick="spawnCar('adder')">إنتاج سيارة: Adder</button>
+            <button class="car-btn" onclick="spawnCar('zentorno')">إنتاج سيارة: Zentorno</button>
+            <button class="car-btn" onclick="spawnCar('t20')">إنتاج سيارة: T20</button>
+            <button class="car-btn" onclick="spawnCar('vigilante')">إنتاج سيارة: Vigilante</button>
+        </div>
+
+        <h3 class="section-title">إعدادات الأداء</h3>
+        <div>
+            <button style="background: #ff4444; color: white; width: 95%;" onclick="toggleSuperSpeed()">تفعيل السرعة الخارقة (Super Speed: ON)</button>
+        </div>
+    </div>
+
+    <script>
+        let ws;
+        let isConnected = false;
+
+        function connectPS4() {
+            const ip = document.getElementById('ps4-ip').value;
+            const statusDiv = document.getElementById('connection-status');
+            
+            if(!ip) {
+                alert("الرجاء إدخال عنوان IP الخاص بجهاز البلايستيشن!");
+                return;
+            }
+
+            // محاولة الاتصال بـ WebRTE الخاص بـ PS4 (عادةً على البورت 9090)
+            try {
+                ws = new WebSocket(`ws://${ip}:9090`);
+                
+                ws.onopen = function() {
+                    isConnected = true;
+                    statusDiv.style.color = "#00ff66";
+                    statusDiv.innerText = "الحالة: متصل بنجاح بالجهاز!";
+                };
+
+                ws.onerror = function() {
+                    statusDiv.style.color = "#ff4444";
+                    statusDiv.innerText = "فشل الاتصال! تأكد من تشغيل باييلود WebRTE على البلايستيشن.";
+                };
+
+                ws.onclose = function() {
+                    isConnected = false;
+                    statusDiv.style.color = "#ffaa00";
+                    statusDiv.innerText = "تم قطع الاتصال.";
+                };
+            } catch (error) {
+                console.error(error);
+                alert("حدث خطأ أثناء محاولة الاتصال.");
+            }
+        }
+
+        function sendCommand(commandData) {
+            if (!isConnected || !ws) {
+                alert("الرجاء الاتصال بجهاز البلايستيشن أولاً!");
+                return;
+            }
+            ws.send(JSON.stringify(commandData));
+            console.log("تم إرسال الأمر:", commandData);
+        }
+
+        function spawnCar(carName) {
+            // كود إرسال أمر الـ Spawn للعبة عبر السيرفر
+            sendCommand({
+                action: "spawn_car",
+                model: carName,
+                teleportInside: true // يركبها تلقائياً بعد الظهور
+            });
+            alert("تم إرسال أمر إظهار وركوب سيارة: " + carName.toUpperCase());
+        }
+
+        function toggleSuperSpeed() {
+            // كود تعديل خصائص محرك السيارة الحالية لزيادة السرعة أضعاف مضاعفة
+            sendCommand({
+                action: "set_superspeed",
+                multiplier: 5.0
+            });
+            alert("تم تفعيل السرعة الفائقة للعربة!");
+        }
+    </script>
+
+</body>
+</html>
