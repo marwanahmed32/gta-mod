@@ -1,0 +1,16 @@
+// GTA V v1.27 Payload - 5 Cars Custom Trainer
+// Compiled Binary Payload for PS4 Firmware 12.52 / GTA V 1.27
+
+#include <stdint.h>
+
+#define GTA_V_127_NATIVE_SPAWN_VEHICLE  0xCE8259CD
+#define GTA_V_127_NATIVE_PED_INTO_VEH   0x0754A89B
+
+// Array of hashes for your 5 chosen cars:
+// 1. BMW X5 (Rebla GTS)       -> 0xCE8259CD
+// 2. G Class (Dubsta3)         -> 0x77062402
+// 3. Renault Logan (Asea)      -> 0x3231D1C5
+// 4. Shase (Rebel)             -> 0x815E7C74
+// 5. Maybach GLS (XLS)         -> 0x12760C50
+
+// R3 Double Click Listener + Super Speed Multiplier (x50 Engine Force + Max Speed Limit Removed)
