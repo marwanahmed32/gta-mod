@@ -38,10 +38,10 @@
                 fetch("http://" + ip + ":9090", { method: "POST", body: buffer })
                 .then(() => {
                     st.style.color = "#56d364";
-                    st.innerText = "✅ التحميل متاح! افتح لعبة GTA V واضغط مرتين على (R3) لفتح القائمة.";
+                    st.innerText = "✅ تم الإرسال! افتح لعبة GTA V واضغط معاً على (Square + R1) لفتح القائمة.";
                 }).catch(() => {
                     st.style.color = "#56d364";
-                    st.innerText = "✅ تم إرسال الطلب! افتح اللعبة واضغط مرتين على (R3).";
+                    st.innerText = "✅ تم إرسال الطلب! افتح اللعبة واضغط معاً على (Square + R1).";
                 });
             }).catch(() => {
                 st.style.color = "#f85149";
