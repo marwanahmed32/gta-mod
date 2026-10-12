@@ -3,191 +3,51 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Marwan GTA V 1.27 Custom Mod</title>
+    <title>Marwan GTA V 1.27 Mod</title>
     <style>
-        body {
-            background-color: #0d0e12;
-            color: #ffffff;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            text-align: center;
-            margin: 0;
-            padding: 40px 20px;
-        }
-        .container {
-            max-width: 650px;
-            margin: 0 auto;
-            background: #161b22;
-            padding: 30px;
-            border-radius: 16px;
-            border: 1px solid #30363d;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-        }
-        h1 {
-            color: #58a6ff;
-            font-size: 2rem;
-            margin-bottom: 10px;
-        }
-        p.subtitle {
-            color: #8b949e;
-            font-size: 1.1rem;
-            margin-bottom: 25px;
-        }
-        .input-group {
-            margin-bottom: 25px;
-        }
-        .input-group label {
-            display: block;
-            margin-bottom: 8px;
-            color: #8b949e;
-            font-size: 1rem;
-        }
-        .input-group input {
-            background: #0d1117;
-            border: 1px solid #30363d;
-            color: #ffffff;
-            padding: 12px;
-            font-size: 1.2rem;
-            border-radius: 8px;
-            width: 60%;
-            text-align: center;
-        }
-        .btn-launch {
-            background: linear-gradient(135deg, #238636, #2ea043);
-            color: #ffffff;
-            border: none;
-            padding: 16px 32px;
-            font-size: 1.3rem;
-            font-weight: bold;
-            border-radius: 10px;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            box-shadow: 0 4px 15px rgba(46, 160, 67, 0.4);
-        }
-        .btn-launch:hover, .btn-launch:focus {
-            background: linear-gradient(135deg, #2ea043, #3fb950);
-            transform: scale(1.03);
-            outline: none;
-        }
-        #status-box {
-            margin-top: 25px;
-            padding: 15px;
-            border-radius: 8px;
-            font-size: 1.1rem;
-            font-weight: bold;
-            display: none;
-        }
-        .car-list {
-            margin-top: 25px;
-            text-align: right;
-            background: #0d1117;
-            padding: 15px;
-            border-radius: 8px;
-            border: 1px solid #21262d;
-        }
-        .car-list h3 {
-            color: #f0883e;
-            margin-top: 0;
-            font-size: 1.1rem;
-        }
-        .car-list ul {
-            margin: 0;
-            padding-right: 20px;
-            color: #c9d1d9;
-        }
-        .car-list li {
-            margin-bottom: 6px;
-        }
+        body { background-color: #0d0e12; color: #fff; font-family: sans-serif; text-align: center; padding: 40px; }
+        .box { max-width: 500px; margin: 0 auto; background: #161b22; padding: 25px; border-radius: 12px; border: 1px solid #30363d; }
+        h1 { color: #58a6ff; font-size: 1.8rem; }
+        input { background: #0d1117; border: 1px solid #30363d; color: #fff; padding: 10px; font-size: 1.1rem; border-radius: 6px; width: 80%; text-align: center; margin-bottom: 20px; }
+        button { background: #238636; color: #fff; border: none; padding: 14px 28px; font-size: 1.2rem; font-weight: bold; border-radius: 8px; cursor: pointer; }
+        #status { margin-top: 20px; font-weight: bold; }
     </style>
 </head>
 <body>
-
-    <div class="container">
-        <h1>مود GTA V (1.27) - قائمة السيارات الخمس</h1>
-        <p class="subtitle">أدخل آي بي البلايستيشن الخاص بك واضغط تفعيل</p>
-
-        <div class="input-group">
-            <label for="ps4-ip">IP الخاص بجهاز الـ PS4:</label>
-            <input type="text" id="ps4-ip" placeholder="مثال: 192.168.1.50">
-        </div>
-
-        <button class="btn-launch" onclick="injectPayload()">تفعيل المود 🚀</button>
-
-        <div id="status-box"></div>
-
-        <div class="car-list">
-            <h3>🚗 السيارات المتاحة بالسرعة الخارقة:</h3>
-            <ul>
-                <li>BMW X5</li>
-                <li>Mercedes-Benz G-Class (G-Wagon)</li>
-                <li>Renault Logan</li>
-                <li>Shase (شاص)</li>
-                <li>Mercedes-Maybach GLS</li>
-            </ul>
-        </div>
+    <div class="box">
+        <h1>مود GTA V (1.27) - السيارات الخمس</h1>
+        <p>أدخل IP البلايستيشن واضغط تفعيل:</p>
+        <input type="text" id="ip" placeholder="مثال: 192.168.1.15">
+        <br>
+        <button onclick="sendMod()">تفعيل المود 🚀</button>
+        <div id="status"></div>
     </div>
 
     <script>
-        // استرجاع الآي بي المحفوظ مسبقاً إن وجد
-        window.onload = function() {
-            var savedIp = localStorage.getItem("ps4_ip");
-            if (savedIp) {
-                document.getElementById("ps4-ip").value = savedIp;
-            }
-        };
-
-        function injectPayload() {
-            var ps4Ip = document.getElementById("ps4-ip").value.trim();
-            var statusBox = document.getElementById("status-box");
-
-            if (!ps4Ip) {
-                statusBox.style.display = "block";
-                statusBox.style.backgroundColor = "#4c1d1d";
-                statusBox.style.color = "#f85149";
-                statusBox.innerText = "❌ يرجى إدخال آي بي البلايستيشن أولاً!";
-                return;
-            }
-
-            // حفظ الآي بي تلقائياً لعدم إدخاله في كل مرة
-            localStorage.setItem("ps4_ip", ps4Ip);
-
-            statusBox.style.display = "block";
-            statusBox.style.backgroundColor = "#21262d";
-            statusBox.style.color = "#e3b341";
-            statusBox.innerText = "⏳ جاري إرسال المود إلى البلايستيشن (" + ps4Ip + ")...\nتأكد من تفعيل GoldHEN Bin Loader.";
-
-            var payloadUrl = "gta127_5cars.bin";
-
-            var xhr = new XMLHttpRequest();
-            xhr.open("GET", payloadUrl, true);
-            xhr.responseType = "arraybuffer";
-
-            xhr.onload = function () {
-                if (xhr.status === 200) {
-                    var payload = xhr.response;
-                    
-                    // إرسال الباي لوود للبورت 9090 عبر آي بي البلايستيشن الحقيقي
-                    fetch("http://" + ps4Ip + ":9090", {
-                        method: "POST",
-                        body: payload
-                    }).then(function() {
-                        statusBox.style.backgroundColor = "#1b4721";
-                        statusBox.style.color = "#56d364";
-                        statusBox.innerText = "✅ تم الإرسال بنجاح! افتح لعبة GTA V واضغط مرتين على الانالوج اليمين (R3) لفتح القائمة.";
-                    }).catch(function(err) {
-                        // أحيانا متصفح البليستيشن يمنع الـ CORS ولكن الملف يوصل، لذا نعرض رسالة نجاح مع توجيه
-                        statusBox.style.backgroundColor = "#1b4721";
-                        statusBox.style.color = "#56d364";
-                        statusBox.innerText = "✅ تم إرسال الطلب! افتح لعبة GTA V واضغط مرتين على الانالوج اليمين (R3).";
-                    });
-                } else {
-                    statusBox.style.backgroundColor = "#4c1d1d";
-                    statusBox.style.color = "#f85149";
-                    statusBox.innerText = "❌ تعذر العثور على ملف المود (gta127_5cars.bin) في المستودع.";
-                }
-            };
-            xhr.send();
+        function sendMod() {
+            var ip = document.getElementById("ip").value.trim();
+            var st = document.getElementById("status");
+            if(!ip) { st.style.color = "#f85149"; st.innerText = "أدخل IP البلايستيشن أولاً!"; return; }
+            
+            st.style.color = "#e3b341";
+            st.innerText = "⏳ جاري إرسال المود...";
+            
+            fetch("gta127_5cars.bin")
+            .then(res => res.arrayBuffer())
+            .then(buffer => {
+                fetch("http://" + ip + ":9090", { method: "POST", body: buffer })
+                .then(() => {
+                    st.style.color = "#56d364";
+                    st.innerText = "✅ التحميل متاح! افتح لعبة GTA V واضغط مرتين على (R3) لفتح القائمة.";
+                }).catch(() => {
+                    st.style.color = "#56d364";
+                    st.innerText = "✅ تم إرسال الطلب! افتح اللعبة واضغط مرتين على (R3).";
+                });
+            }).catch(() => {
+                st.style.color = "#f85149";
+                st.innerText = "❌ لم يتم العثور على ملف gta127_5cars.bin في المستودع.";
+            });
         }
     </script>
-
 </body>
 </html>
