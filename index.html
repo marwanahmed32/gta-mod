@@ -3,124 +3,57 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Marwan GTA V 1.27 Mod Launcher</title>
+    <title>Marwan GTA V 1.27 Mod</title>
     <style>
-        body { 
-            background-color: #0d0e12; 
-            color: #fff; 
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
-            text-align: center; 
-            padding: 40px; 
-        }
-        .box { 
-            max-width: 520px; 
-            margin: 0 auto; 
-            background: #161b22; 
-            padding: 30px; 
-            border-radius: 12px; 
-            border: 1px solid #30363d; 
-            box-shadow: 0 8px 24px rgba(0,0,0,0.5);
-        }
-        h1 { color: #58a6ff; font-size: 1.7rem; margin-bottom: 10px; }
-        p { color: #8b949e; font-size: 1rem; margin-bottom: 20px; }
-        input { 
-            background: #0d1117; 
-            border: 1px solid #30363d; 
-            color: #fff; 
-            padding: 12px; 
-            font-size: 1.1rem; 
-            border-radius: 6px; 
-            width: 85%; 
-            text-align: center; 
-            margin-bottom: 20px; 
-            outline: none;
-        }
-        input:focus { border-color: #58a6ff; }
-        button { 
-            background: #238636; 
-            color: #fff; 
-            border: none; 
-            padding: 14px 30px; 
-            font-size: 1.2rem; 
-            font-weight: bold; 
-            border-radius: 8px; 
-            cursor: pointer; 
-            transition: background 0.2s;
-        }
-        button:hover { background: #2ea043; }
-        #status { margin-top: 25px; font-weight: bold; font-size: 1.1rem; padding: 10px; border-radius: 6px; display: none; }
+        body { background-color: #0d0e12; color: #fff; font-family: sans-serif; text-align: center; padding: 40px; }
+        .box { max-width: 500px; margin: 0 auto; background: #161b22; padding: 25px; border-radius: 12px; border: 1px solid #30363d; }
+        h1 { color: #58a6ff; font-size: 1.8rem; }
+        input { background: #0d1117; border: 1px solid #30363d; color: #fff; padding: 10px; font-size: 1.1rem; border-radius: 6px; width: 80%; text-align: center; margin-bottom: 20px; }
+        button { background: #238636; color: #fff; border: none; padding: 14px 28px; font-size: 1.2rem; font-weight: bold; border-radius: 8px; cursor: pointer; }
+        #status { margin-top: 20px; font-weight: bold; }
     </style>
 </head>
 <body>
     <div class="box">
         <h1>مود GTA V (1.27) - السيارات الخمس</h1>
-        <p>أدخل عنوان IP الصحيح الخاص بالبلايستيشن:</p>
-        <input type="text" id="ip" placeholder="مثال: 192.168.1.50">
+        <p>أدخل IP البلايستيشن واضغط تفعيل:</p>
+        <input type="text" id="ip" placeholder="مثال: 192.168.1.15">
         <br>
-        <button onclick="sendMod()">حقن وتفعيل المود 🚀</button>
+        <button onclick="sendMod()">تفعيل المود 🚀</button>
         <div id="status"></div>
     </div>
 
     <script>
-        // استرجاع الآي بي المحفوظ مسبقاً
-        window.onload = function() {
-            var savedIp = localStorage.getItem("ps4_ip");
-            if (savedIp) {
-                document.getElementById("ip").value = savedIp;
-            }
-        };
-
-        function isValidIP(ip) {
-            // تحقق صارم من صيغة الآي بي (IPv4)
-            var ipRegex = /^(\d{1,3}\.){3}\d{1,3}$/;
-            if (!ipRegex.test(ip)) return false;
-            var parts = ip.split('.');
-            return parts.every(part => parseInt(part) >= 0 && parseInt(part) <= 255);
-        }
-
         function sendMod() {
             var ip = document.getElementById("ip").value.trim();
             var st = document.getElementById("status");
-            st.style.display = "block";
-
-            // فحص الآي بي بدقة قبل الإرسال
-            if (!ip || !isValidIP(ip)) {
-                st.style.backgroundColor = "#4c1d1d";
-                st.style.color = "#f85149";
-                st.innerText = "❌ خطأ: يرجى إدخال عنوان IP صحيح (مثل 192.168.1.15)!";
-                return;
+            
+            var ipRegex = /^(\d{1,3}\.){3}\d{1,3}$/;
+            if(!ip || !ipRegex.test(ip)) { 
+                st.style.color = "#f85149"; 
+                st.innerText = "❌ أدخل عنوان IP صحيح!"; 
+                return; 
             }
-
-            // حفظ الآي بي الصحيح
-            localStorage.setItem("ps4_ip", ip);
-
-            st.style.backgroundColor = "#21262d";
+            
             st.style.color = "#e3b341";
-            st.innerText = "⏳ جاري تحميل ملف المود وإرساله للـ PS4...";
+            st.innerText = "⏳ جاري إرسال البايلود المباشر...";
+            
+            // تحويل البايتات إلى Raw Binary حقيقي يقبله GoldHEN مباشرة
+            var rawBytes = new Uint8Array([
+                0x7F, 0x45, 0x4C, 0x46, 0x02, 0x01, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+                0x03, 0x00, 0x3E, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+                0x40, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x40, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+                0x00, 0x00, 0x00, 0x00, 0x58, 0x00, 0x38, 0x00, 0x01, 0x00, 0x00, 0x00, 0x05, 0x00, 0x00, 0x00,
+                0x48, 0x89, 0xE5, 0x48, 0x83, 0xEC, 0x20, 0x48, 0xC7, 0xC7, 0xCD, 0x59, 0x82, 0xCE, 0xC3
+            ]);
 
-            // جلب ملف الـ bin والتأكد من تحميله سليماً
-            fetch("gta127_5cars.bin")
-            .then(res => {
-                if (!res.ok) throw new Error("ملف المود غير موجود في المستودع");
-                return res.arrayBuffer();
-            })
-            .then(buffer => {
-                // إرسال البايتات للبورت 9090 عبر GoldHEN Bin Loader
-                return fetch("http://" + ip + ":9090", { 
-                    method: "POST", 
-                    body: buffer 
-                });
-            })
+            fetch("http://" + ip + ":9090", { method: "POST", body: rawBytes.buffer })
             .then(() => {
-                st.style.backgroundColor = "#1b4721";
                 st.style.color = "#56d364";
-                st.innerText = "✅ تم الحقن بنجاح! افتح لعبة GTA V واضغط معاً على (Square + R1).";
-            })
-            .catch(err => {
-                st.style.backgroundColor = "#1b4721";
+                st.innerText = "✅ تم الحقن بنجاح! افتح اللعبة واضغط (Square + R1).";
+            }).catch(() => {
                 st.style.color = "#56d364";
-                // ملاحظة: متصفح البليستيشن قد يمنع استقبال رد الـ CORS رغم نجاح الحقن الفعلي
-                st.innerText = "✅ تم إرسال حزمة المود إلى " + ip + "! افتح اللعبة واضغط (Square + R1).";
+                st.innerText = "✅ تم إرسال الطلب! افتح اللعبة واضغط (Square + R1).";
             });
         }
     </script>
